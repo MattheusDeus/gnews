@@ -17,7 +17,7 @@ jobs:
           fetch-depth: 0
 
       - name: AI Reviewer
-        uses: truongnh1992/gemini-ai-code-reviewer@main
+        uses: rubensflinco/gemini-code-review-action@v1
         with:
           gemini_api_key: ${{ secrets.AI_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -29,4 +29,3 @@ jobs:
             2. Code Smells e complexidade ciclomática desnecessária.
             3. Aderência às melhores práticas de Java 25 e Spring Boot 3.4.
             4. Responda com comentários técnicos e construtivos diretamente nas linhas do código afetado.
-
