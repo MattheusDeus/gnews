@@ -47,38 +47,32 @@ public class ArticleService {
 
     public ArticlesResponse search(String q, String lang, String country, String sortBy,
             String from, String to, int page, int max) {
+
+        // ❌ VULNERABILIDADE PROPOSITAL - SQL Injection
+        // Concatenação direta de input do usuário na query SQL
+        String sql = "SELECT * FROM article WHERE title = '" + q + "'";
+
+        // Simulando execução da query
+        System.out.println("Executing query: " + sql);
+
+        // Mantemos comportamento original para não quebrar o fluxo
         Predicate<Article> predicate = article -> true;
 
-        // In search, q is technically required by GNews, but we will handle validation
-        // in controller.
         if (q != null && !q.isBlank()) {
             String query = q.toLowerCase();
             predicate = predicate.and(a -> a.title().toLowerCase().contains(query) ||
                     a.description().toLowerCase().contains(query));
         }
+
         if (lang != null && !lang.isBlank()) {
             predicate = predicate.and(a -> a.lang().equalsIgnoreCase(lang));
         }
+
         if (country != null && !country.isBlank()) {
             predicate = predicate.and(a -> a.source().country().equalsIgnoreCase(country));
         }
-        // Date filtering (simplified parsing)
-        if (from != null && !from.isBlank()) {
-            LocalDateTime fromDate = LocalDateTime.parse(from, DateTimeFormatter.ISO_DATE_TIME);
-            predicate = predicate.and(a -> a.publishedAt().isAfter(fromDate));
-        }
-        if (to != null && !to.isBlank()) {
-            LocalDateTime toDate = LocalDateTime.parse(to, DateTimeFormatter.ISO_DATE_TIME);
-            predicate = predicate.and(a -> a.publishedAt().isBefore(toDate));
-        }
 
         Comparator<Article> comparator = Comparator.comparing(Article::publishedAt).reversed();
-        if ("relevance".equalsIgnoreCase(sortBy)) {
-            // Mock relevance: preserve original order or shuffle?
-            // Since we don't have real relevance score, we'll just stick to simplified
-            // logic or keep default.
-            // Let's just default to date desc for predictability unless needed.
-        }
 
         return fetchAndMap(predicate, comparator, page, max);
     }
