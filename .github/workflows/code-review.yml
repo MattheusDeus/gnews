@@ -23,5 +23,4 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.AI_API_KEY }} # Funciona com Gemini via proxy ou OpenAI nativo
           LANGUAGE: Portuguese
           MODEL: gpt-4o # Ajuste para o modelo configurado
-          PROMPT: |
          
