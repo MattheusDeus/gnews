@@ -14,7 +14,7 @@
 	<name>gnews-mock-api</name>
 	<description>Fake GNews API Implementation</description>
 	<properties>
-		<java.version>25</java.version>
+		<java.version>19</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
