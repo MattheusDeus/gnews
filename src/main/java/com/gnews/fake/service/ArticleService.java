@@ -116,4 +116,20 @@ public class ArticleService {
                         article.source().url(),
                         article.source().country()));
     }
+
+    public static void main(String[] args) {
+        // Criando um ArticleService fictício (sem repositório real)
+        ArticleRepository repo = new ArticleRepository(); // ou um mock se preferir
+        ArticleService service = new ArticleService(repo);
+
+        // Teste com input normal
+        ArticlesResponse normalResponse = service.search("Economia", "pt", "br", null, null, null, 1, 10);
+        System.out.println("Resultado normal: " + normalResponse);
+
+        // Teste com input malicioso (SQL Injection)
+        String maliciousInput = "' OR '1'='1";
+        ArticlesResponse maliciousResponse = service.search(maliciousInput, "pt", "br", null, null, null, 1, 10);
+        System.out.println("Resultado com SQL Injection: " + maliciousResponse);
+    }
+
 }
